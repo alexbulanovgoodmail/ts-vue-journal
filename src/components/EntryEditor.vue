@@ -25,7 +25,9 @@ const handleTextInput = (event: Event) => {
   }
 };
 
-defineEmits(["create"]);
+defineEmits<{
+  (e: "create", entry: { text: string; emoji: Emoji | null }): void;
+}>();
 </script>
 
 <template>
