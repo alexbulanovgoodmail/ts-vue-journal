@@ -2,16 +2,19 @@
 import TheHeader from "@/components/TheHeader.vue";
 import EntryEditor from "./components/EntryEditor.vue";
 import EntryCard from "@/components/EntryCard.vue";
-// import type User from "./types/User";
+import type User from "./types/User";
+import type Entry from "./types/Entry";
 
-import { reactive } from "vue";
-import Entry from "./types/Entry";
+import { provide, reactive } from "vue";
+import { userInjectionKey } from "./injectionKeys";
 
-// const user: User = reactive({
-//   id: 1,
-//   username: "alex-bulanov_io",
-//   setting: [],
-// });
+const user: User = reactive({
+  id: 1,
+  username: "alex-bulanov_io",
+  setting: [],
+});
+
+provide(userInjectionKey, user);
 
 const entries = reactive<Entry[]>([]);
 

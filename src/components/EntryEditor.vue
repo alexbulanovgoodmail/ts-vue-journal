@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import EmojiField from "@/components/EmojiField.vue";
 import ArrowCircleRight from "@/assets/icons/arrow-circle-right.svg";
-
-// import type { Ref } from "vue";
-import { ref, computed, onMounted } from "vue";
+import { userInjectionKey } from "@/injectionKeys";
+import { inject, ref, computed, onMounted } from "vue";
 
 import type Entry from "@/types/Entry";
 import type Emoji from "@/types/Emoji";
 
+// import type { Ref } from "vue";
 // const emoji: Ref<Emoji | null> = ref(null);
 
 const textarea = ref<HTMLTextAreaElement | null>(null);
@@ -36,12 +36,14 @@ const emit = defineEmits<{
   (e: "create", entry: Entry): void;
 }>();
 
+const injectedUser = inject(userInjectionKey);
+
 const handleSubmit = () => {
   emit("create", {
     body: body.value,
     emoji: emoji.value,
     createdAt: new Date(),
-    userId: 1,
+    userId: injectedUser?.id || 1,
     id: Math.random(),
   });
 
@@ -55,7 +57,9 @@ const handleSubmit = () => {
     <textarea
       ref="textarea"
       :value="body"
-      placeholder="New Journal Entry for danielkelly_io"
+      :placeholder="`New Journal Entry for ${
+        injectedUser?.username || 'anonymous'
+      }`"
       @keyup="handleTextInput"
     ></textarea>
     <EmojiField v-model="emoji" />
