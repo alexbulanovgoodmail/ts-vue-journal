@@ -10,9 +10,9 @@ import type Emoji from "@/types/Emoji";
 
 // const emoji: Ref<Emoji | null> = ref(null);
 const emoji = ref<Emoji | null>(null);
-const text = ref("");
+const body = ref("");
 
-const charCount = computed<number>(() => text.value.length);
+const charCount = computed<number>(() => body.value.length);
 
 const maxChars = 280;
 
@@ -20,32 +20,34 @@ const handleTextInput = (event: Event) => {
   const textarea = event.target as HTMLTextAreaElement;
 
   if (textarea.value.length <= maxChars) {
-    text.value = textarea.value;
+    body.value = textarea.value;
   } else {
-    text.value = textarea.value = textarea.value.substring(0, maxChars);
+    body.value = textarea.value = textarea.value.substring(0, maxChars);
   }
 };
 
-defineEmits<{
+const emit = defineEmits<{
   (e: "create", entry: Entry): void;
 }>();
+
+const handleSubmit = () => {
+  emit("create", {
+    body: body.value,
+    emoji: emoji.value,
+    createdAt: new Date(),
+    userId: 1,
+    id: Math.random(),
+  });
+
+  body.value = "";
+  emoji.value = null;
+};
 </script>
 
 <template>
-  <form
-    class="entry-form"
-    @submit.prevent="
-      $emit('create', {
-        body: text,
-        emoji,
-        createdAt: new Date(),
-        userId: 1,
-        id: Math.random(),
-      })
-    "
-  >
+  <form class="entry-form" @submit.prevent="handleSubmit">
     <textarea
-      :value="text"
+      :value="body"
       placeholder="New Journal Entry for danielkelly_io"
       @keyup="handleTextInput"
     ></textarea>
