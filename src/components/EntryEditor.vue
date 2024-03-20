@@ -5,6 +5,7 @@ import ArrowCircleRight from "@/assets/icons/arrow-circle-right.svg";
 // import type { Ref } from "vue";
 import { ref, computed } from "vue";
 
+import type Entry from "@/types/Entry";
 import type Emoji from "@/types/Emoji";
 
 // const emoji: Ref<Emoji | null> = ref(null);
@@ -26,12 +27,23 @@ const handleTextInput = (event: Event) => {
 };
 
 defineEmits<{
-  (e: "create", entry: { text: string; emoji: Emoji | null }): void;
+  (e: "create", entry: Entry): void;
 }>();
 </script>
 
 <template>
-  <form class="entry-form" @submit.prevent="$emit('create', { text, emoji })">
+  <form
+    class="entry-form"
+    @submit.prevent="
+      $emit('create', {
+        body: text,
+        emoji,
+        createdAt: new Date(),
+        userId: 1,
+        id: Math.random(),
+      })
+    "
+  >
     <textarea
       :value="text"
       placeholder="New Journal Entry for danielkelly_io"
