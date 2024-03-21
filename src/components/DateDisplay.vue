@@ -24,9 +24,9 @@ export default defineComponent({
     },
   },
 
-  // mounted() {
-  //   this.date;
-  // },
+  mounted() {
+    this.$http("https://myendpoint.com");
+  },
 });
 </script>
 
